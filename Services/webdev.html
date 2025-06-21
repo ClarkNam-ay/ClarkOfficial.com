@@ -15,5 +15,13 @@
         oninput="emoji.innerText = ['sad', 'happy', 'average happy', 'happier', 'happiest'][this.value]">
         <p id="emoji">sad</p>
     </div>
+
+    <div>
+        <input id="qr" placeholder="Enter URL">
+        <img src="" alt="QR Code" id="qrimg">
+        <button onclick="qrimg.src=' https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' +qr.value">
+            Generate QR
+        </button>
+    </div>
 </body>
 </html>
