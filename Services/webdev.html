@@ -9,5 +9,11 @@
     <a href="/index.html#services" class="btn">Back</a>
 
     <div class="webdev">Welcome</div>
+
+    <div>
+        <input type="range" min="0" max="4" value="0"
+        oninput="emoji.innerText = ['sad', 'happy', 'average happy', 'happier', 'happiest'][this.value]">
+        <p id="emoji">sad</p>
+    </div>
 </body>
 </html>
