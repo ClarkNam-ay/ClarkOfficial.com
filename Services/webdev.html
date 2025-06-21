@@ -24,13 +24,19 @@
         </button>
     </div>
 
-    
+    <div>
         <input id="copyMe" value="clark-official-com.vercel.app">
         <button onclick="navigator.clipboard.writeText
         (copyMe.value); this.innerText = 'Copied!'">
         Copy 
         </button>
-    
+    </div>
+
+    <div>
+        <img src="" alt="" id="img" style="max-width: 150px;">
+        <input type="file"
+        onchange="img.src = window.URL.createObjectURL(this.files[0])">
+    </div>
 
 </body>
 </html>
