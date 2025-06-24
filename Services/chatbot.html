@@ -128,24 +128,39 @@ function getBestMatch(input) {
 
   const chatBox = document.getElementById("chat-box");
 
-  // Create and append user message bubble
+  // Show user's message
   const userBubble = document.createElement("div");
   userBubble.classList.add("message", "user");
   userBubble.textContent = message;
   chatBox.appendChild(userBubble);
 
-  // Get bot response
-  const response = getBestMatch(message);
+  // Typing animation (Clark is thinking)
+  const typingIndicator = document.createElement("div");
+  typingIndicator.classList.add("typing");
+  typingIndicator.setAttribute("id", "typing");
+  chatBox.appendChild(typingIndicator);
+  chatBox.scrollTop = chatBox.scrollHeight;
 
-  // Create and append bot message bubble
-  const botBubble = document.createElement("div");
-  botBubble.classList.add("message", "bot");
-  botBubble.textContent = response;
-  chatBox.appendChild(botBubble);
+  // Delay before showing actual response
+  setTimeout(() => {
+    // Remove typing animation
+    typingIndicator.remove();
+
+    // Get chatbot response
+    const response = getBestMatch(message);
+
+    // Show bot's response
+    const botBubble = document.createElement("div");
+    botBubble.classList.add("message", "bot");
+    botBubble.textContent = response;
+    chatBox.appendChild(botBubble);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }, 1500); // 1.5 second delay
 
   userInput.value = "";
-  chatBox.scrollTop = chatBox.scrollHeight;
+  userInput.focus();
 }
+
 
 // Focus input on page load
   window.onload = () => {
