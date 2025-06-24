@@ -1,33 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Clark Chatbot</title>
   <style>
   body {
-    font-family: Arial;
-    max-width: 600px;
-    margin: auto;
-    padding: 20px;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 10px;
     background: #f9f9f9;
   }
 
+  #chat-container {
+    max-width: 600px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
   #chat-box {
+    flex: 1;
     border: 1px solid #ccc;
     padding: 10px;
-    height: 400px;
     overflow-y: auto;
     background: white;
     display: flex;
     flex-direction: column;
+    border-radius: 10px;
   }
 
   .message {
-    max-width: 70%;
+    max-width: 80%;
     padding: 10px 15px;
     margin: 8px;
     border-radius: 20px;
     line-height: 1.4em;
     word-wrap: break-word;
+    font-size: 0.95rem;
   }
 
   .user {
@@ -44,12 +59,18 @@
     border-bottom-left-radius: 0;
   }
 
+  #input-area {
+    display: flex;
+    margin-top: 10px;
+    gap: 10px;
+  }
+
   input {
-    width: 75%;
+    flex: 1;
     padding: 10px;
     border-radius: 20px;
     border: 1px solid #ccc;
-    margin-top: 10px;
+    font-size: 1rem;
   }
 
   button {
@@ -59,22 +80,42 @@
     background-color: #007bff;
     color: white;
     cursor: pointer;
-    margin-left: 10px;
-    margin-top: 10px;
+    font-size: 1rem;
   }
 
   button:hover {
     background-color: #0056b3;
   }
+
+  @media (max-width: 480px) {
+    .message {
+      max-width: 100%;
+      font-size: 0.9rem;
+    }
+
+    input, button {
+      font-size: 0.9rem;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+    }
+  }
 </style>
+
 
 </head>
 <body>
 
+  <div id="chat-container">
   <h2>Clark Chatbot</h2>
   <div id="chat-box"></div>
-  <input type="text" id="userInput" placeholder="Ask me something..." />
-  <button onclick="sendMessage()">Send</button>
+  <div id="input-area">
+    <input type="text" id="userInput" placeholder="Ask me something..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+</div>
+
 
   <script>
     // Your Q&A Dataset
