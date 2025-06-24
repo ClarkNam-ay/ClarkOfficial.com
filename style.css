@@ -84,6 +84,7 @@ section {
 .home-img img {
     width: 40vw;
     animation: floatImage 4s ease-in-out infinite;
+    filter: drop-shadow(1px 1px 30px #FFD226);
 }
 
 @keyframes floatImage {
