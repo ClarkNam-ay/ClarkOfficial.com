@@ -3,13 +3,71 @@
 <head>
   <title>Clark Chatbot</title>
   <style>
-    body { font-family: Arial; max-width: 600px; margin: auto; padding: 20px; background: #f9f9f9; }
-    #chat-box { border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: auto; background: white; }
-    .user { color: blue; margin: 5px 0; }
-    .bot { color: green; margin: 5px 0; }
-    input { width: 80%; padding: 10px; }
-    button { padding: 10px; }
-  </style>
+  body {
+    font-family: Arial;
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background: #f9f9f9;
+  }
+
+  #chat-box {
+    border: 1px solid #ccc;
+    padding: 10px;
+    height: 400px;
+    overflow-y: auto;
+    background: white;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .message {
+    max-width: 70%;
+    padding: 10px 15px;
+    margin: 8px;
+    border-radius: 20px;
+    line-height: 1.4em;
+    word-wrap: break-word;
+  }
+
+  .user {
+    align-self: flex-end;
+    background-color: #d0ebff;
+    color: #000;
+    border-bottom-right-radius: 0;
+  }
+
+  .bot {
+    align-self: flex-start;
+    background-color: #e6ffe6;
+    color: #000;
+    border-bottom-left-radius: 0;
+  }
+
+  input {
+    width: 75%;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+  }
+
+  button {
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    margin-left: 10px;
+    margin-top: 10px;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
+</style>
+
 </head>
 <body>
 
@@ -47,30 +105,41 @@
     ];
 
     // Simple fuzzy match function (similar to fuzzywuzzy)
-    function getBestMatch(input) {
-  input = input.toLowerCase().trim();
+    function clean(text) {
+  return text.toLowerCase().replace(/[^\w\s]/gi, '').trim();
+}
+
+function getBestMatch(input) {
+  input = clean(input);
   let bestScore = 0;
   let bestResponse = "I'm sorry, I didn't understand that.";
 
-  // First, try direct inclusion match (strong signal)
+  // 1. Exact match
   for (let [question, answer] of dataset) {
-    if (input.includes(question.toLowerCase()) || question.toLowerCase().includes(input)) {
+    if (clean(question) === input) {
       return answer;
     }
   }
 
-  // Fallback: fuzzy similarity matching
+  // 2. Partial (includes) match
+  for (let [question, answer] of dataset) {
+    if (clean(question).includes(input) || input.includes(clean(question))) {
+      return answer;
+    }
+  }
+
+  // 3. Fuzzy matching (Levenshtein similarity)
   dataset.forEach(([question, answer]) => {
-    const score = similarity(input, question.toLowerCase());
+    const score = similarity(input, clean(question));
     if (score > bestScore) {
       bestScore = score;
       bestResponse = answer;
     }
   });
 
-  // Lower threshold a bit for better matching
-  return bestScore > 0.4 ? bestResponse : "I'm sorry, I didn't understand that.";
+  return bestScore > 0.6 ? bestResponse : "I'm sorry, I didn't understand that.";
 }
+
 
 
     // Levenshtein-based similarity (simplified)
@@ -110,19 +179,31 @@
     }
 
     function sendMessage() {
-      const userInput = document.getElementById("userInput");
-      const message = userInput.value.trim();
-      if (!message) return;
+  const userInput = document.getElementById("userInput");
+  const message = userInput.value.trim();
+  if (!message) return;
 
-      const chatBox = document.getElementById("chat-box");
-      chatBox.innerHTML += `<div class="user"><b>You:</b> ${message}</div>`;
+  const chatBox = document.getElementById("chat-box");
 
-      const response = getBestMatch(message);
-      chatBox.innerHTML += `<div class="bot"><b>Clark:</b> ${response}</div>`;
+  // Create and append user message bubble
+  const userBubble = document.createElement("div");
+  userBubble.classList.add("message", "user");
+  userBubble.textContent = message;
+  chatBox.appendChild(userBubble);
 
-      userInput.value = "";
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
+  // Get bot response
+  const response = getBestMatch(message);
+
+  // Create and append bot message bubble
+  const botBubble = document.createElement("div");
+  botBubble.classList.add("message", "bot");
+  botBubble.textContent = response;
+  chatBox.appendChild(botBubble);
+
+  userInput.value = "";
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
   </script>
 
 </body>
