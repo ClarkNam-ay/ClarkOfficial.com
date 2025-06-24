@@ -147,6 +147,18 @@ function getBestMatch(input) {
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 
+// Focus input on page load
+  window.onload = () => {
+    document.getElementById("userInput").focus();
+  };
+
+  // Send on Enter key
+  document.getElementById("userInput").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      sendMessage();
+    }
+  });
+
   </script>
 
 </body>
