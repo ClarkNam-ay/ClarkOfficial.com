@@ -161,11 +161,23 @@ function getBestMatch(input) {
   userInput.focus();
 }
 
+function showWelcomeMessage() {
+  const chatBox = document.getElementById("chat-box");
+
+  const welcomeBubble = document.createElement("div");
+  welcomeBubble.classList.add("message", "bot");
+  welcomeBubble.textContent = "Hello! I'm Clark 🤖. How can I assist you today?";
+  chatBox.appendChild(welcomeBubble);
+
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
 
 // Focus input on page load
   window.onload = () => {
-    document.getElementById("userInput").focus();
-  };
+  document.getElementById("userInput").focus();
+  showWelcomeMessage();
+};
+
 
   // Send on Enter key
   document.getElementById("userInput").addEventListener("keydown", function (e) {
