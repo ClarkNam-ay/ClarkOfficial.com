@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Clark Chatbot</title>
+  <style>
+    body { font-family: Arial; max-width: 600px; margin: auto; padding: 20px; background: #f9f9f9; }
+    #chat-box { border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: auto; background: white; }
+    .user { color: blue; margin: 5px 0; }
+    .bot { color: green; margin: 5px 0; }
+    input { width: 80%; padding: 10px; }
+    button { padding: 10px; }
+  </style>
+</head>
+<body>
+
+  <h2>Clark Chatbot</h2>
+  <div id="chat-box"></div>
+  <input type="text" id="userInput" placeholder="Ask me something..." />
+  <button onclick="sendMessage()">Send</button>
+
+  <script>
+    // Your Q&A Dataset
+    const dataset = [
+      ['What is your name?', 'My name is Clark.'],
+      ['Who made you?', 'Gihimo ko ni Clark nga kina gwapohan sa nga tann'],
+      ['How old are you?', 'I\'m 9999999 yrs old'],
+      ['Kinsay gwapo', 'Ikaw'],
+      ['Hi', 'Hello, Feel free to chat me'],
+      ['How are you?', 'I am fine, thank you.'],
+      ['What can you do?', 'I can assist you with various tasks.'],
+      ['Where are you from?', "I exist in the digital realm, so you could say I'm from the internet!"],
+      ['What is the weather like today?', 'I\'m sorry, I don\'t have access to real-time information.'],
+      ['Tell me a joke.', 'Why don’t scientists trust atoms? Because they make up everything!'],
+      ['Can you help me with math?', 'Sure, I can help with basic arithmetic.'],
+      ['How do I change my password?', 'You can usually change your password in the settings or account section.'],
+      ['What is the meaning of life?', 'That is a philosophical question that has puzzled humans for centuries.'],
+      ['Do you have any siblings?', 'No, I am a solo digital entity.'],
+      ['What is your favorite movie?', 'I do not have preferences like humans do.'],
+      ['What is the capital of France?', 'The capital of France is Paris.'],
+      ['Who is the president of the United States?', 'As of my last update, the president is Joe Biden.'],
+      ['Can you sing?', 'I can\'t sing, but I can provide you with song lyrics!'],
+      ['Do you dream?', 'As an AI, I do not have dreams like humans.'],
+      ['How can I contact support?', 'You can find contact info in the support section of the site.'],
+      ['What are the organization and management?', 'The organization includes the SUC President, Vice Presidents, and Campus Directors.'],
+      ['Who is the suc president?', 'The SUC President is the Chief Executive Officer of the University.'],
+      ['What is the General Provision?', 'It outlines the structure, powers, and roles of the university leadership.']
+    ];
+
+    // Simple fuzzy match function (similar to fuzzywuzzy)
+    function getBestMatch(input) {
+      input = input.toLowerCase();
+      let bestScore = 0;
+      let bestResponse = "I'm sorry, I didn't understand that.";
+
+      dataset.forEach(([question, answer]) => {
+        const score = similarity(input, question.toLowerCase());
+        if (score > bestScore) {
+          bestScore = score;
+          bestResponse = answer;
+        }
+      });
+
+      return bestScore > 60 ? bestResponse : "I'm sorry, I didn't understand that.";
+    }
+
+    // Levenshtein-based similarity (simplified)
+    function similarity(s1, s2) {
+      let longer = s1.length > s2.length ? s1 : s2;
+      let shorter = s1.length <= s2.length ? s1 : s2;
+      let longerLength = longer.length;
+      if (longerLength === 0) return 1.0;
+      return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
+    }
+
+    function editDistance(s1, s2) {
+      s1 = s1.toLowerCase();
+      s2 = s2.toLowerCase();
+
+      const costs = [];
+      for (let i = 0; i <= s1.length; i++) {
+        let lastValue = i;
+        for (let j = 0; j <= s2.length; j++) {
+          if (i === 0)
+            costs[j] = j;
+          else {
+            if (j > 0) {
+              let newValue = costs[j - 1];
+              if (s1.charAt(i - 1) !== s2.charAt(j - 1))
+                newValue = Math.min(Math.min(newValue, lastValue),
+                  costs[j]) + 1;
+              costs[j - 1] = lastValue;
+              lastValue = newValue;
+            }
+          }
+        }
+        if (i > 0)
+          costs[s2.length] = lastValue;
+      }
+      return costs[s2.length];
+    }
+
+    function sendMessage() {
+      const userInput = document.getElementById("userInput");
+      const message = userInput.value.trim();
+      if (!message) return;
+
+      const chatBox = document.getElementById("chat-box");
+      chatBox.innerHTML += `<div class="user"><b>You:</b> ${message}</div>`;
+
+      const response = getBestMatch(message);
+      chatBox.innerHTML += `<div class="bot"><b>Clark:</b> ${response}</div>`;
+
+      userInput.value = "";
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+  </script>
+
+</body>
+</html>
