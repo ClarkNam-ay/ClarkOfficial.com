@@ -48,20 +48,30 @@
 
     // Simple fuzzy match function (similar to fuzzywuzzy)
     function getBestMatch(input) {
-      input = input.toLowerCase();
-      let bestScore = 0;
-      let bestResponse = "I'm sorry, I didn't understand that.";
+  input = input.toLowerCase().trim();
+  let bestScore = 0;
+  let bestResponse = "I'm sorry, I didn't understand that.";
 
-      dataset.forEach(([question, answer]) => {
-        const score = similarity(input, question.toLowerCase());
-        if (score > bestScore) {
-          bestScore = score;
-          bestResponse = answer;
-        }
-      });
-
-      return bestScore > 60 ? bestResponse : "I'm sorry, I didn't understand that.";
+  // First, try direct inclusion match (strong signal)
+  for (let [question, answer] of dataset) {
+    if (input.includes(question.toLowerCase()) || question.toLowerCase().includes(input)) {
+      return answer;
     }
+  }
+
+  // Fallback: fuzzy similarity matching
+  dataset.forEach(([question, answer]) => {
+    const score = similarity(input, question.toLowerCase());
+    if (score > bestScore) {
+      bestScore = score;
+      bestResponse = answer;
+    }
+  });
+
+  // Lower threshold a bit for better matching
+  return bestScore > 0.4 ? bestResponse : "I'm sorry, I didn't understand that.";
+}
+
 
     // Levenshtein-based similarity (simplified)
     function similarity(s1, s2) {
