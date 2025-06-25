@@ -265,7 +265,7 @@ function getBestMatch(input) {
   const loading = document.createElement("div");
   loading.className = "bot-message";
   loading.innerHTML = `
-    <img src="images/business_img.png" class="bot-avatar">
+    <img src="../images/profile.png" class="bot-avatar">
     <div class="typing"></div>
   `;
 
@@ -280,12 +280,12 @@ function getBestMatch(input) {
     const botMsg = document.createElement("div");
     botMsg.className = "bot-message";
     botMsg.innerHTML = `
-      <img src="images/business_img.png" class="bot-avatar">
+      <img src="../images/profile.png" class="bot-avatar">
       <div class="bot-bubble">${response}</div>
     `;
     chatBox.appendChild(botMsg);
     chatBox.scrollTop = chatBox.scrollHeight;
-  }, 5000);
+  }, 3000);
 
   userInput.value = "";
 }
@@ -296,7 +296,7 @@ function showWelcomeMessage() {
   const welcomeBubble = document.createElement("div");
   welcomeBubble.className = "bot-message";
   welcomeBubble.innerHTML = `
-    <img src="images/business_img.png" class="bot-avatar">
+    <img src="../images/profile.png" class="bot-avatar">
     <div class="bot-bubble">Hello! I'm Clark 🤖. How can I assist you today?</div>
   `;
   chatBox.appendChild(welcomeBubble);
