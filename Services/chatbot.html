@@ -256,7 +256,7 @@ function getBestMatch(input) {
   // Show user message
   const userMsg = document.createElement("div");
   userMsg.className = "user-message";
-  userMsg.innerHTML = `<b>You:</b> ${message}`;
+  userMsg.innerHTML = `${message}`;
   chatBox.appendChild(userMsg);
 
   // Typing animation (Clark is thinking)
@@ -264,7 +264,8 @@ function getBestMatch(input) {
   const loading = document.createElement("div");
   loading.className = "bot-message";
   loading.innerHTML = `
-    <img src="images/icon.ico" class="bot-avatar">
+    <img src="images/business_img.png" class="bot-avatar">
+    <div class="bot-bubble">Typing...</div>
   `;
 
   chatBox.appendChild(loading);
@@ -278,8 +279,8 @@ function getBestMatch(input) {
     const botMsg = document.createElement("div");
     botMsg.className = "bot-message";
     botMsg.innerHTML = `
-      <img src="images/icon.ico" class="bot-avatar">
-      <div class="bot-bubble"><b>Clark:</b> ${response}</div>
+      <img src="images/business_img.png" class="bot-avatar">
+      <div class="bot-bubble">${response}</div>
     `;
     chatBox.appendChild(botMsg);
     chatBox.scrollTop = chatBox.scrollHeight;
@@ -292,10 +293,12 @@ function showWelcomeMessage() {
   const chatBox = document.getElementById("chat-box");
 
   const welcomeBubble = document.createElement("div");
-  welcomeBubble.classList.add("message", "bot");
-  welcomeBubble.textContent = "Hello! I'm Clark 🤖. How can I assist you today?";
+  welcomeBubble.className = "bot-message";
+  welcomeBubble.innerHTML = `
+    <img src="images/business_img.png" class="bot-avatar">
+    <div class="bot-bubble">Hello! I'm Clark 🤖. How can I assist you today?</div>
+  `;
   chatBox.appendChild(welcomeBubble);
-
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 
