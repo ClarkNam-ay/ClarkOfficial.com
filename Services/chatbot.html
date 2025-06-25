@@ -264,8 +264,7 @@ function getBestMatch(input) {
   const loading = document.createElement("div");
   loading.className = "bot-message";
   loading.innerHTML = `
-    <img src="https://i.imgur.com/Vz7m7Ov.png" class="bot-avatar">
-    <div class="bot-bubble">Typing...</div>
+    <img src="images/icon.ico" class="bot-avatar">
   `;
 
   chatBox.appendChild(loading);
@@ -279,7 +278,7 @@ function getBestMatch(input) {
     const botMsg = document.createElement("div");
     botMsg.className = "bot-message";
     botMsg.innerHTML = `
-      <img src="https://i.imgur.com/Vz7m7Ov.png" class="bot-avatar">
+      <img src="images/icon.ico" class="bot-avatar">
       <div class="bot-bubble"><b>Clark:</b> ${response}</div>
     `;
     chatBox.appendChild(botMsg);
