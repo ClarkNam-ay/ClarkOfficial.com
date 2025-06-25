@@ -246,6 +246,7 @@ function getBestMatch(input) {
       return costs[s2.length];
     }
 
+//-----------------------------------------------------------------------------------------------------------------------
     function sendMessage() {
   const userInput = document.getElementById("userInput");
   const message = userInput.value.trim();
@@ -265,7 +266,7 @@ function getBestMatch(input) {
   loading.className = "bot-message";
   loading.innerHTML = `
     <img src="images/business_img.png" class="bot-avatar">
-    <div class="bot-bubble">Typing...</div>
+    <div class="typing"></div>
   `;
 
   chatBox.appendChild(loading);
@@ -284,7 +285,7 @@ function getBestMatch(input) {
     `;
     chatBox.appendChild(botMsg);
     chatBox.scrollTop = chatBox.scrollHeight;
-  }, 3000);
+  }, 10000);
 
   userInput.value = "";
 }
