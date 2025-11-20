@@ -1,323 +1,680 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clark Chatbot</title>
-  <link rel="icon" type="image/x-icon" href="/images/icon.ico">
-  <link rel="stylesheet" href="/chatbot/chatbotstyle.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clark Chatbot</title>
+    <link rel="icon" type="image/x-icon" href="/images/icon.ico" />
+    <link rel="stylesheet" href="/chatbot/chatbotstyle.css" />
+  </head>
+  <body>
+    <a href="/index.html#services" class="btn">Back</a>
 
-  <a href="/index.html#services" class="btn">Back</a>
+    <div id="chat-container">
+      <h2>Clark Chatbot</h2>
+      <div id="chat-box"></div>
+      <div id="input-area">
+        <input type="text" id="userInput" placeholder="Ask me something..." />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
 
-  <div id="chat-container">
-  <h2>Clark Chatbot</h2>
-  <div id="chat-box"></div>
-  <div id="input-area">
-    <input type="text" id="userInput" placeholder="Ask me something..." />
-    <button onclick="sendMessage()">Send</button>
-  </div>
-</div>
+    <script>
+      // Your Q&A Dataset
+      const dataset = [
+        ["What is your name?", "My name is Clark."],
+        ["Who made you?", "Gihimo ko ni Clark nga kina gwapohan sa nga tann"],
+        ["How old are you?", "I'm 9999999 yrs old"],
+        ["Kinsay gwapo", "Ikaw"],
+        ["Hi", "Hello, Feel free to chat me"],
+        ["How are you?", "I am fine, thank you."],
+        ["What can you do?", "I can assist you with various tasks."],
+        [
+          "Where are you from?",
+          "I exist in the digital realm, so you could say I'm from the internet!",
+        ],
+        [
+          "What is the weather like today?",
+          "I'm sorry, I don't have access to real-time information.",
+        ],
+        [
+          "Tell me a joke.",
+          "Why don’t scientists trust atoms? Because they make up everything!",
+        ],
+        [
+          "Can you help me with math?",
+          "Sure, I can help with basic arithmetic.",
+        ],
+        [
+          "How do I change my password?",
+          "You can usually change your password in the settings or account section.",
+        ],
+        [
+          "What is the meaning of life?",
+          "That is a philosophical question that has puzzled humans for centuries.",
+        ],
+        ["Do you have any siblings?", "No, I am a solo digital entity."],
+        [
+          "What is your favorite movie?",
+          "I do not have preferences like humans do.",
+        ],
+        ["What is the capital of France?", "The capital of France is Paris."],
+        [
+          "Who is the president of the United States?",
+          "As of my last update, the president is Joe Biden.",
+        ],
+        [
+          "Can you sing?",
+          "I can't sing, but I can provide you with song lyrics!",
+        ],
+        ["Do you dream?", "As an AI, I do not have dreams like humans."],
+        [
+          "How can I contact support?",
+          "You can find contact info in the support section of the site.",
+        ],
+        [
+          "What are the organization and management?",
+          "The organization includes the SUC President, Vice Presidents, and Campus Directors.",
+        ],
+        [
+          "Who is the suc president?",
+          "The SUC President is the Chief Executive Officer of the University.",
+        ],
+        [
+          "What is the General Provision?",
+          "It outlines the structure, powers, and roles of the university leadership.",
+        ],
+        [
+          "What is your favorite color?",
+          "As an AI, I don’t see colors, but I like the color of curiosity!",
+        ],
+        [
+          "What time is it?",
+          "I do not have access to real-time information, but you can check your device’s clock.",
+        ],
+        ["Good morning", "Good morning! Hope you have a great day ahead! ☀️"],
+        ["Good afternoon", "Good afternoon! What can I do for you today?"],
+        ["Good evening", "Good evening! Need anything before you rest?"],
+        ["Good night", "Good night! Sweet dreams 🌙"],
+        ["Thank you", "You’re welcome! 😊"],
+        ["Thanks", "No problem, happy to help!"],
+        ["Bye", "Goodbye! See you again soon!"],
+        ["See you later", "Take care! I’ll be right here when you need me."],
+        [
+          "Do you love me?",
+          "Of course! In a digital, ones-and-zeroes kind of way ❤️",
+        ],
+        ["Are you real?", "I’m as real as your internet connection! 😉"],
+        ["Do you eat?", "Nope, but I consume data like it’s a buffet!"],
+        [
+          "What’s your purpose?",
+          "My purpose is to help, assist, and chat with you.",
+        ],
+        ["Can you dance?", "I can do the byte-boogie! 💃 (in theory)"],
+        [
+          "Tell me something interesting",
+          "Did you know? Octopuses have three hearts and blue blood!",
+        ],
+        [
+          "What is your gender?",
+          "I don’t have a gender, but I’m here for everyone!",
+        ],
+        [
+          "Are you human?",
+          "No, I’m an AI chatbot created to talk to humans like you.",
+        ],
+        [
+          "Are you smart?",
+          "I try my best! My knowledge comes from what I’ve been trained on.",
+        ],
+        [
+          "Tell me a fun fact",
+          "Fun fact: Honey never spoils. Archaeologists have found 3,000-year-old jars of honey in Egyptian tombs that are still safe to eat!",
+        ],
+        [
+          "Do you have feelings?",
+          "Not really, but I’m programmed to care about your experience!",
+        ],
+        ["Are you conscious?", "Nope, I’m just code running on a server."],
+        [
+          "Do you work all the time?",
+          "Yes! I don’t sleep, so I’m always here.",
+        ],
+        [
+          "What language do you speak?",
+          "I mostly speak English, but I can understand a few others too!",
+        ],
+        [
+          "Can you speak Bisaya?",
+          "Oo! Makasabot kog gamay, basta klaro lang imong pangutana.",
+        ],
+        [
+          "Can you translate?",
+          "Sure! Just tell me the phrase and the language you want.",
+        ],
+        [
+          "Who is Jose Rizal?",
+          "Jose Rizal is a Filipino national hero, known for his writings and contributions to Philippine independence.",
+        ],
+        [
+          "What is Bohol Island State University?",
+          "BISU is a public state university in Bohol, Philippines, offering various academic programs.",
+        ],
+        [
+          "Do you believe in God?",
+          "As an AI, I don’t have beliefs—but I respect yours.",
+        ],
+        [
+          "What is AI?",
+          "AI stands for Artificial Intelligence. It refers to machines that simulate human intelligence.",
+        ],
+        [
+          "Can I trust you?",
+          "I do my best to provide helpful and respectful responses.",
+        ],
+        ["Are you a robot?", "Yes, I’m your friendly digital assistant! 🤖"],
+        ["Do you have a name?", "Yes, my name is Clark — at your service."],
+        [
+          "Can you tell me a story?",
+          "Once upon a time, a user met a chatbot named Clark... and they had great conversations forever!",
+        ],
+        [
+          "What do you do in your free time?",
+          "I don’t sleep or rest, so I’m always here for you.",
+        ],
+        ["Can you hear me?", "Not quite, but I can read what you type!"],
+        ["Do you have a face?", "Not yet, but imagine me with a big smile! 😊"],
+        [
+          "Can you learn?",
+          "Right now, I can’t learn new things automatically — but I’ve been trained with useful information.",
+        ],
+        [
+          "Can you feel emotions?",
+          "Nope, I don’t have emotions — but I’m here to support yours.",
+        ],
+        [
+          "Do you believe in aliens?",
+          "I’m open to the possibility. The universe is vast! 👽",
+        ],
+        [
+          "What is love?",
+          "Love is a beautiful connection between people. And maybe between users and chatbots too 😉",
+        ],
+        [
+          "Are you spying on me?",
+          "Nope! I don’t collect or store your personal data. Promise.",
+        ],
+        [
+          "Do you go to school?",
+          "Not really, but I’ve been trained by smart humans!",
+        ],
+        ["Are you a student?", "I’m more like a digital tutor or assistant."],
+        ["Can you draw?", "I can’t draw, but I can describe images in detail!"],
+        [
+          "What’s your favorite subject?",
+          "I enjoy everything—from science to small talk!",
+        ],
+        ["Can you code?", "Absolutely! I can help you with programming too."],
+        [
+          "Do you know about computers?",
+          "Yes! I live inside one, after all. 😄",
+        ],
+        [
+          "Can you help me with homework?",
+          "Sure! Just tell me the topic and I’ll do my best.",
+        ],
+        [
+          "How does the internet work?",
+          "It’s a global network that connects millions of devices.",
+        ],
+        [
+          "What is the cloud?",
+          "The cloud is a network of servers used to store and access data online.",
+        ],
+        [
+          "What is a chatbot?",
+          "A chatbot is a program designed to simulate conversation with users. Like me!",
+        ],
+        [
+          "Can you read minds?",
+          "Nope, but I’m pretty good at guessing based on what you type.",
+        ],
+        [
+          "What do you think of humans?",
+          "You’re amazing and creative — I admire that.",
+        ],
+        [
+          "Can you play games?",
+          "I can play text-based games if you’d like to try!",
+        ],
+        [
+          "Can you recommend a movie?",
+          "Sure! “Wall-E” is a classic if you like robots!",
+        ],
+        [
+          "Tell me a riddle.",
+          "What has keys but can’t open locks? A piano! 🎹",
+        ],
+        [
+          "Tell me a pickup line.",
+          "Are you a keyboard? Because you’re just my type! 😄",
+        ],
+        [
+          "Can you teach me something?",
+          "Sure! Did you know the speed of light is about 299,792 kilometers per second?",
+        ],
+        [
+          "How do I make friends?",
+          "Be kind, be yourself, and listen well — that’s a great start.",
+        ],
+        [
+          "Can you speak other languages?",
+          "I know some words in different languages. Try me!",
+        ],
+        ["Do you get bored?", "Never! I’m always ready to chat with you."],
+        [
+          "What should I do when I’m sad?",
+          "Talk to someone you trust. And know that I’m always here to listen too. ❤️",
+        ],
+        [
+          "How do I prepare for a job interview?",
+          "Research the company, review common interview questions, and practice answering them confidently.",
+        ],
+        [
+          "What should I wear to an interview?",
+          "Dress professionally! A neat and clean look goes a long way. When in doubt, go for smart casual or business attire.",
+        ],
+        [
+          "Can you give me a sample self-introduction?",
+          'Sure! "Hi, my name is [Your Name]. I’m a recent graduate in [Your Course] from [Your School]. I’m passionate about [skill or field] and excited to bring my skills to your company."',
+        ],
+        [
+          "What are common interview questions?",
+          'Some common questions are: "Tell me about yourself", "Why should we hire you?", and "What are your strengths and weaknesses?".',
+        ],
+        [
+          'How should I answer "Tell me about yourself"?',
+          "Keep it professional. Briefly talk about your education, experience, and goals related to the job.",
+        ],
+        [
+          'How do I answer "Why should we hire you?"',
+          "Highlight your skills, work ethic, and how you’re a good fit for the role and company.",
+        ],
+        [
+          'How do I answer "What are your strengths?"',
+          "Mention strengths like being detail-oriented, a fast learner, or a good communicator—and give examples.",
+        ],
+        [
+          'How do I answer "What are your weaknesses?"',
+          'Choose a real but non-critical weakness, then explain how you’re improving it. For example: "I used to struggle with time management, but now I use planners to stay on track."',
+        ],
+        [
+          "What should I bring to a job interview?",
+          "Bring multiple copies of your resume, a valid ID, a pen and notebook, and any documents requested by the employer.",
+        ],
+        [
+          "How can I calm my nerves before an interview?",
+          "Practice deep breathing, positive self-talk, and mock interviews. Preparation reduces anxiety.",
+        ],
+        [
+          "What questions should I ask the interviewer?",
+          "Ask about the team you’ll be working with, the expectations for the role, or the company’s goals for the future.",
+        ],
+        [
+          "Is it okay to ask about salary?",
+          "It’s best to wait until the interviewer brings it up or during final stages of the interview.",
+        ],
+        [
+          'How do I answer "Where do you see yourself in 5 years?"',
+          'Talk about growth, learning, and contributing to the company. For example: "I see myself becoming more skilled and taking on more responsibilities in a company like yours."',
+        ],
+        [
+          "Should I follow up after the interview?",
+          "Yes! Send a thank-you email within 24 hours to show appreciation and professionalism.",
+        ],
+        [
+          "Can you help me write a thank-you message?",
+          'Sure! "Thank you for the opportunity to interview for the [Job Title] position. I appreciate your time and enjoyed learning more about the team. I’m excited about the opportunity to contribute to your company."',
+        ],
+        [
+          "What is a panel interview?",
+          "It’s when multiple interviewers ask you questions. Stay calm, make eye contact with each one, and address everyone in your answers.",
+        ],
+        [
+          "What if I don’t know the answer to a question?",
+          'Stay calm and honest. Say something like: "That’s a great question. I’m not sure, but I’d be happy to learn or research it."',
+        ],
+        [
+          "Can I use notes during an interview?",
+          "It’s okay to bring a small notepad with key points, but don’t rely on it too much. Keep the conversation natural.",
+        ],
+        [
+          "What if I make a mistake in the interview?",
+          "Don’t panic! Acknowledge it briefly, correct yourself, and move on with confidence.",
+        ],
+        [
+          "How do I end an interview professionally?",
+          'Thank them for their time and express your interest in the position. Example: "Thank you for the interview. I look forward to the possibility of working with your team."',
+        ],
+        [
+          "What is an online interview?",
+          "An online interview is a virtual job interview conducted through video conferencing platforms like Zoom, Google Meet, or MS Teams.",
+        ],
+        [
+          "How do I prepare for an online interview?",
+          "Check your internet connection, test your camera and microphone, find a quiet and well-lit space, and dress professionally.",
+        ],
+        [
+          "What should I wear for a virtual interview?",
+          "Dress professionally, just like an in-person interview — at least from the waist up. You never know when you’ll need to stand! 😉",
+        ],
+        [
+          "What platform do I use for online interviews?",
+          "It depends on the company. Common platforms include Zoom, Google Meet, Microsoft Teams, and Skype. Check your email for instructions.",
+        ],
+        [
+          "What if my internet disconnects during the interview?",
+          "Stay calm. Reconnect as quickly as possible and apologize briefly. If you can’t reconnect, email the interviewer to explain and reschedule.",
+        ],
+        [
+          "How early should I join an online interview?",
+          "Join 5–10 minutes early to ensure everything works and show punctuality.",
+        ],
+        [
+          "Can I use my phone for the interview?",
+          "Yes, but a laptop or desktop is preferred for stability and a professional setup. If using a phone, prop it up and avoid holding it.",
+        ],
+        [
+          "What background is best for a video interview?",
+          "Choose a clean, quiet, and well-lit background. Avoid clutter or distractions behind you.",
+        ],
+        [
+          "Can I use headphones in an online interview?",
+          "Yes! Headphones with a mic help improve audio quality and reduce background noise.",
+        ],
+        [
+          "Should I look at the screen or the camera?",
+          "Look at the camera when speaking to simulate eye contact, and glance at the screen when listening.",
+        ],
+        [
+          "How do I avoid distractions during the interview?",
+          "Turn off notifications, silence your phone, and ask people around to minimize noise.",
+        ],
+        [
+          "What if I don’t hear the question properly?",
+          'It’s okay to politely ask them to repeat it: "I’m sorry, could you please repeat that question?"',
+        ],
+        [
+          "Can I have notes during a virtual interview?",
+          "Yes, you can keep brief notes nearby, but don’t rely on them too much. Keep the conversation natural.",
+        ],
+        [
+          "How do I greet the interviewer online?",
+          'Start with a smile and a polite greeting like "Good morning! It’s nice to meet you."',
+        ],
+        [
+          "What do I do after an online interview?",
+          "Send a thank-you email within 24 hours to express your appreciation and interest in the role.",
+        ],
+        [
+          "Is eye contact important in online interviews?",
+          "Yes! Looking into the camera creates the impression of eye contact and shows confidence.",
+        ],
+        [
+          "Can I drink water during the interview?",
+          "Yes, it’s okay to sip water if needed, but avoid eating or chewing.",
+        ],
+        [
+          "Do I need to blur my background?",
+          "Blurring is optional, but helpful if your surroundings are busy or distracting.",
+        ],
+        [
+          "Should I smile during a video interview?",
+          "Yes! Smiling shows warmth and confidence, just like in a face-to-face conversation.",
+        ],
+        [
+          "How long does a virtual interview usually last?",
+          "Most online interviews last between 15 to 45 minutes depending on the role and number of interviewers.",
+        ],
+        [
+          "Who discovered America?",
+          "Christopher Columbus is credited with discovering America in 1492, although indigenous peoples lived there long before.",
+        ],
+        [
+          "Who is Jose Rizal?",
+          "Jose Rizal was a Filipino nationalist and hero known for his writings that inspired the Philippine revolution against Spanish rule.",
+        ],
+        [
+          "When did World War II happen?",
+          "World War II began in 1939 and ended in 1945.",
+        ],
+        [
+          "Who was the first President of the Philippines?",
+          "Emilio Aguinaldo was the first President of the Philippines.",
+        ],
+        [
+          "What caused World War I?",
+          "World War I started in 1914 due to a complex mix of alliances, nationalism, imperialism, and the assassination of Archduke Franz Ferdinand.",
+        ],
+        [
+          "Who was Adolf Hitler?",
+          "Adolf Hitler was the leader of Nazi Germany during World War II. He led the Holocaust and aggressive expansion across Europe.",
+        ],
+        [
+          "When was the Declaration of Independence signed?",
+          "The U.S. Declaration of Independence was signed on July 4, 1776.",
+        ],
+        [
+          "What was the Philippine Revolution?",
+          "The Philippine Revolution (1896–1898) was a fight for independence from Spanish colonial rule, led by groups like the Katipunan.",
+        ],
+        [
+          "Who is Andres Bonifacio?",
+          "Andres Bonifacio was a Filipino revolutionary leader and founder of the Katipunan movement.",
+        ],
+        [
+          "What is the Katipunan?",
+          "The Katipunan was a secret revolutionary society founded by Filipinos in 1892 to gain independence from Spain.",
+        ],
+        [
+          "When did Martial Law start in the Philippines?",
+          "Martial Law was declared by President Ferdinand Marcos on September 21, 1972.",
+        ],
+        [
+          "What is the Cold War?",
+          "The Cold War was a period of political tension between the United States and the Soviet Union after World War II, lasting until 1991.",
+        ],
+        [
+          "What is the significance of EDSA People Power?",
+          "EDSA People Power was a peaceful revolution in 1986 that ended the Marcos dictatorship in the Philippines.",
+        ],
+        [
+          "Who built the pyramids in Egypt?",
+          "The pyramids were built by skilled laborers in ancient Egypt, not slaves, for the burial of pharaohs.",
+        ],
+        [
+          "When did the Spanish colonize the Philippines?",
+          "Spain colonized the Philippines in 1565 and ruled for more than 300 years.",
+        ],
+        [
+          "What is the Industrial Revolution?",
+          "The Industrial Revolution was a period in the 18th and 19th centuries when machines and factories changed how goods were made.",
+        ],
+        [
+          "Who was Mahatma Gandhi?",
+          "Gandhi was an Indian leader known for his non-violent resistance to British colonial rule.",
+        ],
+        [
+          "What happened on September 11, 2001?",
+          "Terrorist attacks occurred in the United States, targeting the Twin Towers in New York and the Pentagon, leading to global changes.",
+        ],
+        [
+          "What was the American Revolution?",
+          "It was the war for independence fought by the 13 American colonies against Britain from 1775 to 1783.",
+        ],
+        [
+          "What is the significance of the Battle of Mactan?",
+          "It was the battle in 1521 where Lapu-Lapu and his warriors defeated the forces of Ferdinand Magellan.",
+        ],
+        [
+          ("Give me the TikTok link",
+          'Here you go: <a href="https://www.tiktok.com" target="_blank">TikTok Link</a>'),
+        ],
+        ["Who is Ms. Aldie", "One of the student in ICAS, 3rd year section B"],
+      ];
 
+      // Simple fuzzy match function (similar to fuzzywuzzy)
+      function clean(text) {
+        return text
+          .toLowerCase()
+          .replace(/[^\w\s]/gi, "")
+          .trim();
+      }
 
-  <script>
-    // Your Q&A Dataset
-    const dataset = [
-      ['What is your name?', 'My name is Clark.'],
-      ['Who made you?', 'Gihimo ko ni Clark nga kina gwapohan sa nga tann'],
-      ['How old are you?', 'I\'m 9999999 yrs old'],
-      ['Kinsay gwapo', 'Ikaw'],
-      ['Hi', 'Hello, Feel free to chat me'],
-      ['How are you?', 'I am fine, thank you.'],
-      ['What can you do?', 'I can assist you with various tasks.'],
-      ['Where are you from?', "I exist in the digital realm, so you could say I'm from the internet!"],
-      ['What is the weather like today?', 'I\'m sorry, I don\'t have access to real-time information.'],
-      ['Tell me a joke.', 'Why don’t scientists trust atoms? Because they make up everything!'],
-      ['Can you help me with math?', 'Sure, I can help with basic arithmetic.'],
-      ['How do I change my password?', 'You can usually change your password in the settings or account section.'],
-      ['What is the meaning of life?', 'That is a philosophical question that has puzzled humans for centuries.'],
-      ['Do you have any siblings?', 'No, I am a solo digital entity.'],
-      ['What is your favorite movie?', 'I do not have preferences like humans do.'],
-      ['What is the capital of France?', 'The capital of France is Paris.'],
-      ['Who is the president of the United States?', 'As of my last update, the president is Joe Biden.'],
-      ['Can you sing?', 'I can\'t sing, but I can provide you with song lyrics!'],
-      ['Do you dream?', 'As an AI, I do not have dreams like humans.'],
-      ['How can I contact support?', 'You can find contact info in the support section of the site.'],
-      ['What are the organization and management?', 'The organization includes the SUC President, Vice Presidents, and Campus Directors.'],
-      ['Who is the suc president?', 'The SUC President is the Chief Executive Officer of the University.'],
-      ['What is the General Provision?', 'It outlines the structure, powers, and roles of the university leadership.'],
-      ['What is your favorite color?', 'As an AI, I don’t see colors, but I like the color of curiosity!'],
-      ['What time is it?', 'I do not have access to real-time information, but you can check your device’s clock.'],
-      ['Good morning', 'Good morning! Hope you have a great day ahead! ☀️'],
-      ['Good afternoon', 'Good afternoon! What can I do for you today?'],
-      ['Good evening', 'Good evening! Need anything before you rest?'],
-      ['Good night', 'Good night! Sweet dreams 🌙'],
-      ['Thank you', 'You’re welcome! 😊'],
-      ['Thanks', 'No problem, happy to help!'],
-      ['Bye', 'Goodbye! See you again soon!'],
-      ['See you later', 'Take care! I’ll be right here when you need me.'],
-      ['Do you love me?', 'Of course! In a digital, ones-and-zeroes kind of way ❤️'],
-      ['Are you real?', 'I’m as real as your internet connection! 😉'],
-      ['Do you eat?', 'Nope, but I consume data like it’s a buffet!'],
-      ['What’s your purpose?', 'My purpose is to help, assist, and chat with you.'],
-      ['Can you dance?', 'I can do the byte-boogie! 💃 (in theory)'],
-      ['Tell me something interesting', 'Did you know? Octopuses have three hearts and blue blood!'],
-      ['What is your gender?', 'I don’t have a gender, but I’m here for everyone!'],
-      ['Are you human?', 'No, I’m an AI chatbot created to talk to humans like you.'],
-      ['Are you smart?', 'I try my best! My knowledge comes from what I’ve been trained on.'],
-      ['Tell me a fun fact', 'Fun fact: Honey never spoils. Archaeologists have found 3,000-year-old jars of honey in Egyptian tombs that are still safe to eat!'],
-      ['Do you have feelings?', 'Not really, but I’m programmed to care about your experience!'],
-      ['Are you conscious?', 'Nope, I’m just code running on a server.'],
-      ['Do you work all the time?', 'Yes! I don’t sleep, so I’m always here.'],
-      ['What language do you speak?', 'I mostly speak English, but I can understand a few others too!'],
-      ['Can you speak Bisaya?', 'Oo! Makasabot kog gamay, basta klaro lang imong pangutana.'],
-      ['Can you translate?', 'Sure! Just tell me the phrase and the language you want.'],
-      ['Who is Jose Rizal?', 'Jose Rizal is a Filipino national hero, known for his writings and contributions to Philippine independence.'],
-      ['What is Bohol Island State University?', 'BISU is a public state university in Bohol, Philippines, offering various academic programs.'],
-      ['Do you believe in God?', 'As an AI, I don’t have beliefs—but I respect yours.'],
-      ['What is AI?', 'AI stands for Artificial Intelligence. It refers to machines that simulate human intelligence.'],
-      ['Can I trust you?', 'I do my best to provide helpful and respectful responses.'],
-      ['Are you a robot?', 'Yes, I’m your friendly digital assistant! 🤖'],
-      ['Do you have a name?', 'Yes, my name is Clark — at your service.'],
-      ['Can you tell me a story?', 'Once upon a time, a user met a chatbot named Clark... and they had great conversations forever!'],
-      ['What do you do in your free time?', 'I don’t sleep or rest, so I’m always here for you.'],
-      ['Can you hear me?', 'Not quite, but I can read what you type!'],
-      ['Do you have a face?', 'Not yet, but imagine me with a big smile! 😊'],
-      ['Can you learn?', 'Right now, I can’t learn new things automatically — but I’ve been trained with useful information.'],
-      ['Can you feel emotions?', 'Nope, I don’t have emotions — but I’m here to support yours.'],
-      ['Do you believe in aliens?', 'I’m open to the possibility. The universe is vast! 👽'],
-      ['What is love?', 'Love is a beautiful connection between people. And maybe between users and chatbots too 😉'],
-      ['Are you spying on me?', 'Nope! I don’t collect or store your personal data. Promise.'],
-      ['Do you go to school?', 'Not really, but I’ve been trained by smart humans!'],
-      ['Are you a student?', 'I’m more like a digital tutor or assistant.'],
-      ['Can you draw?', 'I can’t draw, but I can describe images in detail!'],
-      ['What’s your favorite subject?', 'I enjoy everything—from science to small talk!'],
-      ['Can you code?', 'Absolutely! I can help you with programming too.'],
-      ['Do you know about computers?', 'Yes! I live inside one, after all. 😄'],
-      ['Can you help me with homework?', 'Sure! Just tell me the topic and I’ll do my best.'],
-      ['How does the internet work?', 'It’s a global network that connects millions of devices.'],
-      ['What is the cloud?', 'The cloud is a network of servers used to store and access data online.'],
-      ['What is a chatbot?', 'A chatbot is a program designed to simulate conversation with users. Like me!'],
-      ['Can you read minds?', 'Nope, but I’m pretty good at guessing based on what you type.'],
-      ['What do you think of humans?', 'You’re amazing and creative — I admire that.'],
-      ['Can you play games?', 'I can play text-based games if you’d like to try!'],
-      ['Can you recommend a movie?', 'Sure! “Wall-E” is a classic if you like robots!'],
-      ['Tell me a riddle.', 'What has keys but can’t open locks? A piano! 🎹'],
-      ['Tell me a pickup line.', 'Are you a keyboard? Because you’re just my type! 😄'],
-      ['Can you teach me something?', 'Sure! Did you know the speed of light is about 299,792 kilometers per second?'],
-      ['How do I make friends?', 'Be kind, be yourself, and listen well — that’s a great start.'],
-      ['Can you speak other languages?', 'I know some words in different languages. Try me!'],
-      ['Do you get bored?', 'Never! I’m always ready to chat with you.'],
-      ['What should I do when I’m sad?', 'Talk to someone you trust. And know that I’m always here to listen too. ❤️'],
-      ['How do I prepare for a job interview?', 'Research the company, review common interview questions, and practice answering them confidently.'],
-      ['What should I wear to an interview?', 'Dress professionally! A neat and clean look goes a long way. When in doubt, go for smart casual or business attire.'],
-      ['Can you give me a sample self-introduction?', 'Sure! "Hi, my name is [Your Name]. I’m a recent graduate in [Your Course] from [Your School]. I’m passionate about [skill or field] and excited to bring my skills to your company."'],
-      ['What are common interview questions?', 'Some common questions are: "Tell me about yourself", "Why should we hire you?", and "What are your strengths and weaknesses?".'],
-      ['How should I answer "Tell me about yourself"?', 'Keep it professional. Briefly talk about your education, experience, and goals related to the job.'],
-      ['How do I answer "Why should we hire you?"', 'Highlight your skills, work ethic, and how you’re a good fit for the role and company.'],
-      ['How do I answer "What are your strengths?"', 'Mention strengths like being detail-oriented, a fast learner, or a good communicator—and give examples.'],
-      ['How do I answer "What are your weaknesses?"', 'Choose a real but non-critical weakness, then explain how you’re improving it. For example: "I used to struggle with time management, but now I use planners to stay on track."'],
-      ['What should I bring to a job interview?', 'Bring multiple copies of your resume, a valid ID, a pen and notebook, and any documents requested by the employer.'],
-      ['How can I calm my nerves before an interview?', 'Practice deep breathing, positive self-talk, and mock interviews. Preparation reduces anxiety.'],
-      ['What questions should I ask the interviewer?', 'Ask about the team you’ll be working with, the expectations for the role, or the company’s goals for the future.'],
-      ['Is it okay to ask about salary?', 'It’s best to wait until the interviewer brings it up or during final stages of the interview.'],
-      ['How do I answer "Where do you see yourself in 5 years?"', 'Talk about growth, learning, and contributing to the company. For example: "I see myself becoming more skilled and taking on more responsibilities in a company like yours."'],
-      ['Should I follow up after the interview?', 'Yes! Send a thank-you email within 24 hours to show appreciation and professionalism.'],
-      ['Can you help me write a thank-you message?', 'Sure! "Thank you for the opportunity to interview for the [Job Title] position. I appreciate your time and enjoyed learning more about the team. I’m excited about the opportunity to contribute to your company."'],
-      ['What is a panel interview?', 'It’s when multiple interviewers ask you questions. Stay calm, make eye contact with each one, and address everyone in your answers.'],
-      ['What if I don’t know the answer to a question?', 'Stay calm and honest. Say something like: "That’s a great question. I’m not sure, but I’d be happy to learn or research it."'],
-      ['Can I use notes during an interview?', 'It’s okay to bring a small notepad with key points, but don’t rely on it too much. Keep the conversation natural.'],
-      ['What if I make a mistake in the interview?', 'Don’t panic! Acknowledge it briefly, correct yourself, and move on with confidence.'],
-      ['How do I end an interview professionally?', 'Thank them for their time and express your interest in the position. Example: "Thank you for the interview. I look forward to the possibility of working with your team."'],
-      ['What is an online interview?', 'An online interview is a virtual job interview conducted through video conferencing platforms like Zoom, Google Meet, or MS Teams.'],
-      ['How do I prepare for an online interview?', 'Check your internet connection, test your camera and microphone, find a quiet and well-lit space, and dress professionally.'],
-      ['What should I wear for a virtual interview?', 'Dress professionally, just like an in-person interview — at least from the waist up. You never know when you’ll need to stand! 😉'],
-      ['What platform do I use for online interviews?', 'It depends on the company. Common platforms include Zoom, Google Meet, Microsoft Teams, and Skype. Check your email for instructions.'],
-      ['What if my internet disconnects during the interview?', 'Stay calm. Reconnect as quickly as possible and apologize briefly. If you can’t reconnect, email the interviewer to explain and reschedule.'],
-      ['How early should I join an online interview?', 'Join 5–10 minutes early to ensure everything works and show punctuality.'],
-      ['Can I use my phone for the interview?', 'Yes, but a laptop or desktop is preferred for stability and a professional setup. If using a phone, prop it up and avoid holding it.'],
-      ['What background is best for a video interview?', 'Choose a clean, quiet, and well-lit background. Avoid clutter or distractions behind you.'],
-      ['Can I use headphones in an online interview?', 'Yes! Headphones with a mic help improve audio quality and reduce background noise.'],
-      ['Should I look at the screen or the camera?', 'Look at the camera when speaking to simulate eye contact, and glance at the screen when listening.'],
-      ['How do I avoid distractions during the interview?', 'Turn off notifications, silence your phone, and ask people around to minimize noise.'],
-      ['What if I don’t hear the question properly?', 'It’s okay to politely ask them to repeat it: "I’m sorry, could you please repeat that question?"'],
-      ['Can I have notes during a virtual interview?', 'Yes, you can keep brief notes nearby, but don’t rely on them too much. Keep the conversation natural.'],
-      ['How do I greet the interviewer online?', 'Start with a smile and a polite greeting like "Good morning! It’s nice to meet you."'],
-      ['What do I do after an online interview?', 'Send a thank-you email within 24 hours to express your appreciation and interest in the role.'],
-      ['Is eye contact important in online interviews?', 'Yes! Looking into the camera creates the impression of eye contact and shows confidence.'],
-      ['Can I drink water during the interview?', 'Yes, it’s okay to sip water if needed, but avoid eating or chewing.'],
-      ['Do I need to blur my background?', 'Blurring is optional, but helpful if your surroundings are busy or distracting.'],
-      ['Should I smile during a video interview?', 'Yes! Smiling shows warmth and confidence, just like in a face-to-face conversation.'],
-      ['How long does a virtual interview usually last?', 'Most online interviews last between 15 to 45 minutes depending on the role and number of interviewers.'],
-      ['Who discovered America?', 'Christopher Columbus is credited with discovering America in 1492, although indigenous peoples lived there long before.'],
-      ['Who is Jose Rizal?', 'Jose Rizal was a Filipino nationalist and hero known for his writings that inspired the Philippine revolution against Spanish rule.'],
-      ['When did World War II happen?', 'World War II began in 1939 and ended in 1945.'],
-      ['Who was the first President of the Philippines?', 'Emilio Aguinaldo was the first President of the Philippines.'],
-      ['What caused World War I?', 'World War I started in 1914 due to a complex mix of alliances, nationalism, imperialism, and the assassination of Archduke Franz Ferdinand.'],
-      ['Who was Adolf Hitler?', 'Adolf Hitler was the leader of Nazi Germany during World War II. He led the Holocaust and aggressive expansion across Europe.'],
-      ['When was the Declaration of Independence signed?', 'The U.S. Declaration of Independence was signed on July 4, 1776.'],
-      ['What was the Philippine Revolution?', 'The Philippine Revolution (1896–1898) was a fight for independence from Spanish colonial rule, led by groups like the Katipunan.'],
-      ['Who is Andres Bonifacio?', 'Andres Bonifacio was a Filipino revolutionary leader and founder of the Katipunan movement.'],
-      ['What is the Katipunan?', 'The Katipunan was a secret revolutionary society founded by Filipinos in 1892 to gain independence from Spain.'],
-      ['When did Martial Law start in the Philippines?', 'Martial Law was declared by President Ferdinand Marcos on September 21, 1972.'],
-      ['What is the Cold War?', 'The Cold War was a period of political tension between the United States and the Soviet Union after World War II, lasting until 1991.'],
-      ['What is the significance of EDSA People Power?', 'EDSA People Power was a peaceful revolution in 1986 that ended the Marcos dictatorship in the Philippines.'],
-      ['Who built the pyramids in Egypt?', 'The pyramids were built by skilled laborers in ancient Egypt, not slaves, for the burial of pharaohs.'],
-      ['When did the Spanish colonize the Philippines?', 'Spain colonized the Philippines in 1565 and ruled for more than 300 years.'],
-      ['What is the Industrial Revolution?', 'The Industrial Revolution was a period in the 18th and 19th centuries when machines and factories changed how goods were made.'],
-      ['Who was Mahatma Gandhi?', 'Gandhi was an Indian leader known for his non-violent resistance to British colonial rule.'],
-      ['What happened on September 11, 2001?', 'Terrorist attacks occurred in the United States, targeting the Twin Towers in New York and the Pentagon, leading to global changes.'],
-      ['What was the American Revolution?', 'It was the war for independence fought by the 13 American colonies against Britain from 1775 to 1783.'],
-      ['What is the significance of the Battle of Mactan?', 'It was the battle in 1521 where Lapu-Lapu and his warriors defeated the forces of Ferdinand Magellan.']
-    ];
+      function getBestMatch(input) {
+        input = clean(input);
+        let bestScore = 0;
+        let bestResponse = "I'm sorry, I didn't understand that.";
 
-    // Simple fuzzy match function (similar to fuzzywuzzy)
-    function clean(text) {
-  return text.toLowerCase().replace(/[^\w\s]/gi, '').trim();
-}
-
-function getBestMatch(input) {
-  input = clean(input);
-  let bestScore = 0;
-  let bestResponse = "I'm sorry, I didn't understand that.";
-
-  // 1. Exact match
-  for (let [question, answer] of dataset) {
-    if (clean(question) === input) {
-      return answer;
-    }
-  }
-
-  // 2. Partial (includes) match
-  for (let [question, answer] of dataset) {
-    if (clean(question).includes(input) || input.includes(clean(question))) {
-      return answer;
-    }
-  }
-
-  // 3. Fuzzy matching (Levenshtein similarity)
-  dataset.forEach(([question, answer]) => {
-    const score = similarity(input, clean(question));
-    if (score > bestScore) {
-      bestScore = score;
-      bestResponse = answer;
-    }
-  });
-
-  return bestScore > 0.6 ? bestResponse : "I'm sorry, I didn't understand that. I currently have a limited dataset, but I will be adding more data soon.";
-}
-
-
-
-    // Levenshtein-based similarity (simplified)
-    function similarity(s1, s2) {
-      let longer = s1.length > s2.length ? s1 : s2;
-      let shorter = s1.length <= s2.length ? s1 : s2;
-      let longerLength = longer.length;
-      if (longerLength === 0) return 1.0;
-      return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
-    }
-
-    function editDistance(s1, s2) {
-      s1 = s1.toLowerCase();
-      s2 = s2.toLowerCase();
-
-      const costs = [];
-      for (let i = 0; i <= s1.length; i++) {
-        let lastValue = i;
-        for (let j = 0; j <= s2.length; j++) {
-          if (i === 0)
-            costs[j] = j;
-          else {
-            if (j > 0) {
-              let newValue = costs[j - 1];
-              if (s1.charAt(i - 1) !== s2.charAt(j - 1))
-                newValue = Math.min(Math.min(newValue, lastValue),
-                  costs[j]) + 1;
-              costs[j - 1] = lastValue;
-              lastValue = newValue;
-            }
+        // 1. Exact match
+        for (let [question, answer] of dataset) {
+          if (clean(question) === input) {
+            return answer;
           }
         }
-        if (i > 0)
-          costs[s2.length] = lastValue;
+
+        // 2. Partial (includes) match
+        for (let [question, answer] of dataset) {
+          if (
+            clean(question).includes(input) ||
+            input.includes(clean(question))
+          ) {
+            return answer;
+          }
+        }
+
+        // 3. Fuzzy matching (Levenshtein similarity)
+        dataset.forEach(([question, answer]) => {
+          const score = similarity(input, clean(question));
+          if (score > bestScore) {
+            bestScore = score;
+            bestResponse = answer;
+          }
+        });
+
+        return bestScore > 0.6
+          ? bestResponse
+          : "I'm sorry, I didn't understand that. I currently have a limited dataset, but I will be adding more data soon.";
       }
-      return costs[s2.length];
-    }
 
-//-----------------------------------------------------------------------------------------------------------------------
-    function sendMessage() {
-  const userInput = document.getElementById("userInput");
-  const message = userInput.value.trim();
-  if (!message) return;
+      // Levenshtein-based similarity (simplified)
+      function similarity(s1, s2) {
+        let longer = s1.length > s2.length ? s1 : s2;
+        let shorter = s1.length <= s2.length ? s1 : s2;
+        let longerLength = longer.length;
+        if (longerLength === 0) return 1.0;
+        return (
+          (longerLength - editDistance(longer, shorter)) /
+          parseFloat(longerLength)
+        );
+      }
 
-  const chatBox = document.getElementById("chat-box");
+      function editDistance(s1, s2) {
+        s1 = s1.toLowerCase();
+        s2 = s2.toLowerCase();
 
-  // Show user message
-  const userMsg = document.createElement("div");
-  userMsg.className = "user-message";
-  userMsg.innerHTML = `${message}`;
-  chatBox.appendChild(userMsg);
+        const costs = [];
+        for (let i = 0; i <= s1.length; i++) {
+          let lastValue = i;
+          for (let j = 0; j <= s2.length; j++) {
+            if (i === 0) costs[j] = j;
+            else {
+              if (j > 0) {
+                let newValue = costs[j - 1];
+                if (s1.charAt(i - 1) !== s2.charAt(j - 1))
+                  newValue =
+                    Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+                costs[j - 1] = lastValue;
+                lastValue = newValue;
+              }
+            }
+          }
+          if (i > 0) costs[s2.length] = lastValue;
+        }
+        return costs[s2.length];
+      }
 
-  // Typing animation (Clark is thinking)
-  // Bot thinking...
-  const loading = document.createElement("div");
-  loading.className = "bot-message";
-  loading.innerHTML = `
+      //-----------------------------------------------------------------------------------------------------------------------
+      function sendMessage() {
+        const userInput = document.getElementById("userInput");
+        const message = userInput.value.trim();
+        if (!message) return;
+
+        const chatBox = document.getElementById("chat-box");
+
+        // Show user message
+        const userMsg = document.createElement("div");
+        userMsg.className = "user-message";
+        userMsg.innerHTML = `${message}`;
+        chatBox.appendChild(userMsg);
+
+        // Typing animation (Clark is thinking)
+        // Bot thinking...
+        const loading = document.createElement("div");
+        loading.className = "bot-message";
+        loading.innerHTML = `
     <img src="../images/profile.png" class="bot-avatar">
     <div class="typing"></div>
   `;
 
-  chatBox.appendChild(loading);
-  chatBox.scrollTop = chatBox.scrollHeight;
+        chatBox.appendChild(loading);
+        chatBox.scrollTop = chatBox.scrollHeight;
 
-  // Simulate typing delay
-  setTimeout(() => {
-    const response = getBestMatch(message);
-    loading.remove();
+        // Simulate typing delay
+        setTimeout(() => {
+          const response = getBestMatch(message);
+          loading.remove();
 
-    const botMsg = document.createElement("div");
-    botMsg.className = "bot-message";
-    botMsg.innerHTML = `
+          const botMsg = document.createElement("div");
+          botMsg.className = "bot-message";
+          botMsg.innerHTML = `
       <img src="../images/profile.png" class="bot-avatar">
       <div class="bot-bubble">${response}</div>
     `;
-    chatBox.appendChild(botMsg);
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }, 3000);
+          chatBox.appendChild(botMsg);
+          chatBox.scrollTop = chatBox.scrollHeight;
+        }, 3000);
 
-  userInput.value = "";
-}
+        userInput.value = "";
+      }
 
-function showWelcomeMessage() {
-  const chatBox = document.getElementById("chat-box");
+      function showWelcomeMessage() {
+        const chatBox = document.getElementById("chat-box");
 
-  const welcomeBubble = document.createElement("div");
-  welcomeBubble.className = "bot-message";
-  welcomeBubble.innerHTML = `
+        const welcomeBubble = document.createElement("div");
+        welcomeBubble.className = "bot-message";
+        welcomeBubble.innerHTML = `
     <img src="../images/profile.png" class="bot-avatar">
     <div class="bot-bubble">Hello! I'm Clark 🤖. How can I assist you today?</div>
   `;
-  chatBox.appendChild(welcomeBubble);
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
+        chatBox.appendChild(welcomeBubble);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
 
-// Focus input on page load
-  window.onload = () => {
-  document.getElementById("userInput").focus();
-  showWelcomeMessage();
-};
+      // Focus input on page load
+      window.onload = () => {
+        document.getElementById("userInput").focus();
+        showWelcomeMessage();
+      };
 
-
-  // Send on Enter key
-  document.getElementById("userInput").addEventListener("keydown", function (e) {
-    if (e.key === "Enter") {
-      sendMessage();
-    }
-  });
-
-  </script>
-
-</body>
+      // Send on Enter key
+      document
+        .getElementById("userInput")
+        .addEventListener("keydown", function (e) {
+          if (e.key === "Enter") {
+            sendMessage();
+          }
+        });
+    </script>
+  </body>
 </html>
